@@ -19,7 +19,7 @@ jobs:
 
       - name: Install Crossplane CLI
         run: |
-          curl -sfL https://raw.githubusercontent.com/crossplane/crossplane-cli/master/install.sh | sh
+          curl -sfL "https://cli.crossplane.io/install.sh" | sh
           sudo mv crossplane /usr/local/bin/crossplane
           crossplane version --client
 

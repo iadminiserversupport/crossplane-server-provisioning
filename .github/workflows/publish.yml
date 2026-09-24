@@ -39,5 +39,5 @@ jobs:
       - name: Push package
         run: |
           crossplane xpkg push \
-            ghcr.io/${{ github.repository }}:${{ github.ref_name }} \
-            crossplane-server-provisioning.xpkg
+            -f crossplane-server-provisioning.xpkg \
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}

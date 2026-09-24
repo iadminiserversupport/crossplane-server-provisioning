@@ -1,0 +1,19 @@
+apiVersion: meta.pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: iserversupport-cloud-server-provisioning
+  annotations:
+    meta.crossplane.io/maintainer: iServerSupport
+    meta.crossplane.io/source: https://github.com/iadminiserversupport/crossplane-server-provisioning
+    meta.crossplane.io/license: Apache-2.0
+    meta.crossplane.io/description: Cloud server provisioning configuration for Crossplane
+spec:
+  dependsOn:
+    - apiVersion: pkg.crossplane.io/v1
+      kind: Provider
+      package: xpkg.upbound.io/upbound/provider-aws-ec2
+      version: ">=v1.0.0"
+    - apiVersion: pkg.crossplane.io/v1
+      kind: Function
+      package: xpkg.crossplane.io/crossplane-contrib/function-patch-and-transform
+      version: ">=v0.8.2"

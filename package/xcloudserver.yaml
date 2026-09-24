@@ -1,0 +1,59 @@
+{
+"apiVersion": "apiextensions.crossplane.io/v1",
+"kind": "CompositeResourceDefinition",
+"metadata": {
+"name": "xcloudservers.compute.iserversupport.com"
+},
+"spec": {
+"group": "compute.iserversupport.com",
+"names": {
+"kind": "XCloudServer",
+"plural": "xcloudservers"
+},
+"claimNames": {
+"kind": "CloudServer",
+"plural": "cloudservers"
+},
+"versions": [
+{
+"name": "v1alpha1",
+"served": true,
+"referenceable": true,
+"schema": {
+"openAPIV3Schema": {
+"type": "object",
+"properties": {
+"spec": {
+"type": "object",
+"properties": {
+"region": {
+"type": "string",
+"description": "AWS region where the server will be provisioned.",
+"default": "us-east-1"
+},
+"instanceType": {
+"type": "string",
+"description": "AWS EC2 instance type.",
+"default": "t3.micro"
+},
+"ami": {
+"type": "string",
+"description": "AWS AMI ID to use for the server."
+},
+"providerConfigRef": {
+"type": "string",
+"description": "AWS ProviderConfig name.",
+"default": "default"
+}
+},
+"required": [
+"ami"
+]
+}
+}
+}
+}
+}
+]
+}
+}

@@ -1,0 +1,44 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xcloudserver-aws-ec2
+spec:
+  compositeTypeRef:
+    apiVersion: compute.iserversupport.com/v1alpha1
+    kind: XCloudServer
+  mode: Pipeline
+  pipeline:
+    - step: patch-and-transform
+      functionRef:
+        name: function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+        resources:
+          - name: ec2-instance
+            base:
+              apiVersion: ec2.aws.m.upbound.io/v1beta1
+              kind: Instance
+              spec:
+                forProvider:
+                  region: us-east-1
+                  instanceType: t3.micro
+                  ami: ami-00000000000000000
+                  tags:
+                    ManagedBy: Crossplane
+                    Service: iServerSupport
+                providerConfigRef:
+                  name: default
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.region
+                toFieldPath: spec.forProvider.region
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.instanceType
+                toFieldPath: spec.forProvider.instanceType
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.ami
+                toFieldPath: spec.forProvider.ami
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.providerConfigRef
+                toFieldPath: spec.providerConfigRef.name

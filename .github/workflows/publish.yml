@@ -1,0 +1,43 @@
+name: Publish Crossplane Package
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Crossplane CLI
+        run: |
+          curl -sfL https://raw.githubusercontent.com/crossplane/crossplane-cli/master/install.sh | sh
+          sudo mv crossplane /usr/local/bin/crossplane
+          crossplane version --client
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build package
+        run: |
+          crossplane xpkg build \
+            --package-root=package \
+            --package-file=crossplane-server-provisioning.xpkg
+
+      - name: Push package
+        run: |
+          crossplane xpkg push \
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }} \
+            crossplane-server-provisioning.xpkg
